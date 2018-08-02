@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.test.dao.testUserdao">
+    <!--专门用于存放sql映射文件 di_couple-->
+    <resultMap type="org.test.dto.picDTO" id="testDTORM">
+        <id property="mPicId" column="pic_id"/>
+        <result property="mGoodsId" column="goods_id"/>
+        <result property="mPicUrl" column="pic_url"/>
+    </resultMap>
+    <select id="queryDataCustom" resultMap="testDTORM">
+        SELECT * FROM t_pic
+    </select>
+</mapper>

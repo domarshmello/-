@@ -1,0 +1,7 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <JavaeeCodeStyleSettings>
+      <option name="ENTITY_EB_PREFIX" value="m" />
+    </JavaeeCodeStyleSettings>
+  </code_scheme>
+</component>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD
+ Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace实际上接口的名字 -->
+<mapper namespace="org.test.dao.UserDao">
+    <!--&lt;!&ndash;ps :使用心得  与数据库端解耦 idea不解耦就是不好用&ndash;&gt;-->
+    <resultMap type="org.test.dto.UserDTO" id="resultMapUserDTO">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="user_name"/>
+        <result property="password" column="user_pass"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="sex" column="user_sex"/>
+        <result property="studentNo" column="student_no"/>
+        <result property="department" column="student_department"/>
+        <result property="major" column="student_major"/>
+        <result property="year" column="student_year"/>
+        <result property="photoPath" column="photoPath"/>
+    </resultMap>
+
+    <!-- 根据用户名和密码查询 -->
+    <select id="findByUserNameAndPassword" resultMap="resultMapUserDTO">
+        select * from t_user where user_name=#{username} and user_pass=#{password}
+    </select>
+    <select id="getStudents" resultMap="resultMapUserDTO">
+        select * from t_user WHERE role = 'STUDENT'
+    </select>
+
+    <select id="getTeachers" resultMap="resultMapUserDTO">
+        select * from t_user WHERE role = 'TEACHER'
+    </select>
+
+    <select id="findById" resultMap="resultMapUserDTO">
+        select * from t_user
+        where user_id = #{userId}
+    </select>
+
+
+    <insert id="addStudent" parameterType="UserDTO">
+        insert into t_user(user_name, user_pass, student_depart, student_major, student_no, role, photoPath)
+        values(#{username}, #{password}, #{department}, #{major}, #{studentNo}, 'STUDENT', #{photoPath})
+    </insert>
+
+    <insert id="addTeacher" parameterType="UserDTO">
+        insert into t_user(user_name, user_pass, student_depart, student_major,role)
+        values(#{username}, #{password}, #{department}, #{major}, 'TEACHER')
+    </insert>
+
+
+    <!--更新修改同学信息-->
+    <update id="updateStudent" parameterType="UserDTO">
+        update t_user
+        set user_name = #{username},student_major=#{major}
+        where user_id=#{userId}
+    </update>
+
+
+    <delete id="delete">
+        delete from t_user where user_id=#{userId}
+    </delete>
+
+
+</mapper>

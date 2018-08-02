@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD
+ Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace实际上接口的名字 -->
+<mapper namespace="org.test.dao.DataDictionaryDao">
+    <!--&lt;!&ndash;ps :使用心得  与数据库端解耦 idea不解耦就是不好用&ndash;&gt;-->
+    <resultMap type="org.test.dto.DataDictionaryItem" id="resultMapDataDictionaryItem">
+        <id property="id" column="id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="value" column="value"/>
+        <result property="text" column="text"/>
+        <result property="parent_id" column="parentId"/>
+    </resultMap>
+
+    <select id="listItem" resultMap="resultMapDataDictionaryItem">
+        select i.*
+        from DataDictionary_item i
+        join DataDictionary_type t on i.type_id = t.id
+        where t.name = #{typeName}
+    </select>
+
+    <select id="listSubItem" resultMap="resultMapDataDictionaryItem">
+        select i.*
+        from DataDictionary_item i
+        join DataDictionary_type t on i.type_id = t.id
+        join DataDictionary_item pi on t.parent_id = pi.type_id
+        where t.name = #{typeName}
+        and pi.value = #{parentValue}
+        and i.parent_id = pi.id
+    </select>
+</mapper>

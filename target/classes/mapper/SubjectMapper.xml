@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD
+ Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace实际上接口的名字 -->
+<mapper namespace="org.test.dao.SubDao">
+
+    <!--ps :使用心得  与数据库端解耦 idea不解耦就是不好用-->
+    <resultMap type="org.test.dto.SubDTO" id="resultMapSubDTO">
+        <id property="subId" column="sub_id"/>
+        <result property="subName" column="sub_name"/>
+        <result property="subDesc" column="sub_desc"/>
+    </resultMap>
+
+    <select id="list" resultMap="resultMapSubDTO">
+        select * from t_subject
+    </select>
+
+    <select id="findById" resultMap="resultMapSubDTO">
+        select * from t_subject
+        where sub_id=#{subId}
+    </select>
+
+    <insert id="addSubject" parameterType="SubDTO">
+        insert into t_subject(sub_name, sub_desc)
+        values(#{subName}, #{subDesc})
+    </insert>
+    <!--更新信息-->
+    <update id="updateSubject" parameterType="SubDTO">
+        update t_subject
+        set sub_name = #{subName},sub_desc=#{subDesc}
+        where sub_id=#{subId}
+    </update>
+
+    <delete id="deleteSubjectById" parameterType="SubDTO">
+        delete from t_subject where sub_id=#{subId}
+    </delete>
+</mapper>

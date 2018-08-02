@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD
+ Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace实际上接口的名字 -->
+<mapper namespace="org.test.dao.DefenseDao">
+
+    <!--ps :使用心得  与数据库端解耦 idea不解耦就是不好用-->
+    <resultMap type="org.test.dto.DefenseDTO" id="resultMapDefenseDTO">
+        <id property="id" column="id"/>
+        <result property="subjectId" column="subject_id"/>
+        <result property="subjectName" column="subject_name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="defenseDate" column="defenseDate"/>
+        <result property="location" column="location"/>
+        <result property="score" column="score"/>
+        <result property="status" column="defense_status"/>
+    </resultMap>
+
+    <resultMap type="org.test.dto.ClassDTO" id="resultMapClassDTO">
+        <id property="classId" column="id"/>
+        <result property="className" column="name"/>
+    </resultMap>
+
+    <select id="list" resultMap="resultMapDefenseDTO">
+        select def.id id,
+        def.subject_id subject_id,
+        sub.sub_name subject_name,
+        def.student_id student_id,
+        stu.user_name student_name,
+        def.defense_date,
+        def.location,
+        def.score,
+        def.defense_status
+        from t_defense def
+        join t_user stu on def.student_id = stu.user_id
+        join t_subject sub on def.subject_id = sub.sub_id
+    </select>
+
+    <select id="findById" resultMap="resultMapDefenseDTO">
+        select def.id id,
+        def.subject_id subject_id,
+        sub.sub_name subject_name,
+        def.student_id student_id,
+        stu.user_name student_name,
+        def.defense_date,
+        def.location,
+        def.score,
+        def.defense_status
+        from t_defense def
+        join t_user stu on def.student_id = stu.user_id
+        join t_subject sub on def.subject_id = sub.subject_id
+        where def.id=#{id}
+    </select>
+
+    <insert id="addDefense" parameterType="org.test.dto.DefenseDTO">
+        insert into t_defense(subject_id, student_id, defense_date, location, defense_status)
+        values(#{defense.subjectId}, #{defense.studentId}, #{defense.defenseDate}, #{defense.location}, '未评分')
+    </insert>
+
+    <update id="inputDefenseScore" parameterType="org.test.dto.DefenseDTO">
+        update t_defense
+        set score = #{defense.score}, defense_status = '已评分'
+        where id=#{defense.id}
+    </update>
+
+    <insert id="addSubject" parameterType="SubDTO">
+        insert into t_subject(sub_name, sub_desc)
+        values(#{subject.subName}, #{subject.subDesc})
+    </insert>
+    <!--更新信息-->
+    <update id="updateSubject" parameterType="SubDTO">
+        update t_subject
+        set sub_name = #{subject.subName},sub_desc=#{subject.subDesc}
+        where sub_id=#{subject.subId}
+    </update>
+
+    <delete id="deleteSubjectById" parameterType="SubDTO">
+        delete from t_subject where sub_id=#{subId}
+    </delete>
+
+    <select id="listClass" resultMap="resultMapClassDTO">
+        select id,name
+        from t_class
+    </select>
+</mapper>
